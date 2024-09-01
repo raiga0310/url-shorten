@@ -1,0 +1,11 @@
+name = "url-shorten"
+main = "build/worker/shim.mjs"
+compatibility_date = "2024-08-29"
+
+[build]
+command = "cargo install -q worker-build && worker-build --release"
+
+[[kv_namespaces]]
+binding = "kv-url"
+id = "9b0c5dadb76948c9b16e6e5726c0c6f9"
+preview_id = "103db4b6002a42978988d94de7115af7"
