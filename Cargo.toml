@@ -20,13 +20,14 @@ tower-service = "0.3.2"
 console_error_panic_hook = { version = "0.1.1" }
 uuid = { version = "1.10.0", features = ["v4", "fast-rng", "js"]}
 serde = "1.0.209"
-worker = "0.3.4"
-worker-macros = "0.3.4"
+worker = "0.4.0"
+worker-macros = "0.4.0"
 axum-wasm-macros = "^0.1.0"
 futures = "0.3.29"
 axum-macros = "0.4.1"
 oneshot = "0.1.8"
 serde_json = "1.0.127"
+axum-cloudflare-adapter = "0.13.0"
 
 [dev-dependencies]
 wasm-bindgen-test = "^0.3.34"

@@ -1,4 +1,5 @@
-use axum_cloudflare_adapter::lib::{to_axum_request, to_worker_response};
+use axum_cloudflare_adapter::EnvWrapper;
+use axum_cloudflare_adapter::{to_axum_request, to_worker_response};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use worker::*;
@@ -11,11 +12,7 @@ use axum::{
     Router as AxumRouter,
 };
 
-use std::ops::Deref;
 use tower_service::Service;
-
-mod axum_cloudflare_adapter;
-use crate::axum_cloudflare_adapter::lib::EnvWrapper;
 
 #[derive(Clone)]
 pub struct AxumState {
@@ -54,6 +51,8 @@ async fn create(
     State(state): State<AxumState>,
     extract::Json(payload): extract::Json<CreateKey>,
 ) -> impl axum::response::IntoResponse {
+    use std::ops::Deref;
+
     use serde_json::json;
 
     let env: &Env = state.env_wrapper.env.deref();
@@ -75,13 +74,12 @@ async fn redirect(
     State(state): State<AxumState>,
     Path(key): Path<String>,
 ) -> axum::http::Response<axum::body::Body> {
+    use std::ops::Deref;
+
     let env: &Env = state.env_wrapper.env.deref();
     let kv = env.kv("kv-url").unwrap();
 
-    let url = match kv.get(&key).text().await {
-        Ok(url) => url,
-        Err(_) => None,
-    };
+    let url = (kv.get(&key).text().await).unwrap_or_default();
     let url = match url {
         Some(url) => url,
         None => "/".to_string(),
